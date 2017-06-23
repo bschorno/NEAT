@@ -13,7 +13,7 @@ namespace Neat.Demo
     {
         public static NeuralNetwork network;
 
-        public static void setNetworkWeights(NeuralNetwork aNetwork, double[] weights)
+        public static void setNetworkWeights(double[] weights)
         {
             int index = 0;
 
@@ -34,7 +34,7 @@ namespace Neat.Demo
         {
             double fitness = 0;
 
-            setNetworkWeights(network, weights);
+            setNetworkWeights(weights);
 
             // AND
             double output = network.Run(new List<double>(new double[2] { 0, 0 }))[0];
@@ -70,7 +70,7 @@ namespace Neat.Demo
             ga.GetBest(out weights, out fitness);
             Console.WriteLine("Best brain had a fitness of " + fitness);
 
-            setNetworkWeights(network, weights);
+            setNetworkWeights(weights);
 
             double input1;
             string strInput1 = "";
