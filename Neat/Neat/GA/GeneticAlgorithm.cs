@@ -315,7 +315,7 @@ namespace Neat.GA
         /// <param name="fitness"></param>
         public void GetBest(out double[] values, out double fitness)
         {
-            this.GetNthGenome(this._populationSize - 1, out values, out fitness);
+            this.GetGenome(this._thisGeneration.Count - 1, out values, out fitness);
         }
 
         /// <summary>
@@ -325,7 +325,7 @@ namespace Neat.GA
         /// <param name="fitness"></param>
         public void GetWorst(out double[] values, out double fitness)
         {
-            this.GetNthGenome(0, out values, out fitness);
+            this.GetGenome(0, out values, out fitness);
         }
 
         /// <summary>
@@ -334,9 +334,9 @@ namespace Neat.GA
         /// <param name="n"></param>
         /// <param name="values"></param>
         /// <param name="fitness"></param>
-        public void GetNthGenome(int n, out double[] values, out double fitness)
+        public void GetGenome(int n, out double[] values, out double fitness)
         {
-            if (n < 0 || n > this._populationSize - 1)
+            if (n < 0 || n >= this._thisGeneration.Count)
                 throw new ArgumentOutOfRangeException("n too large, or too small");
             Genome g = this._thisGeneration[n];
             values = new double[g.Length];
