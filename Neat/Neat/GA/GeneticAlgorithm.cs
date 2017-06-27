@@ -315,6 +315,12 @@ namespace Neat.GA
         /// <param name="fitness"></param>
         public void GetBest(out double[] values, out double fitness)
         {
+            if (this._thisGeneration == null || this._thisGeneration.Count == 0)
+            {
+                values = new double[0];
+                fitness = 0d;
+                return;
+            }
             this.GetGenome(this._thisGeneration.Count - 1, out values, out fitness);
         }
 
@@ -325,6 +331,12 @@ namespace Neat.GA
         /// <param name="fitness"></param>
         public void GetWorst(out double[] values, out double fitness)
         {
+            if (this._thisGeneration == null || this._thisGeneration.Count == 0)
+            {
+                values = new double[0];
+                fitness = 0d;
+                return;
+            }
             this.GetGenome(0, out values, out fitness);
         }
 
