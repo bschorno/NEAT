@@ -40,6 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EA\EvolutionaryAlogorithm.cs" />
+    <Compile Include="EA\Gene.cs" />
+    <Compile Include="EA\Genome.cs" />
+    <Compile Include="EA\Network.cs" />
+    <Compile Include="EA\Neuron.cs" />
+    <Compile Include="EA\Pool.cs" />
+    <Compile Include="EA\Species.cs" />
     <Compile Include="GA\GeneticAlgorithm.cs" />
     <Compile Include="GA\Genome.cs" />
     <Compile Include="NN\CryptoRandom.cs" />
