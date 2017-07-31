@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neat", "Neat\Neat.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neat.Demo", "Neat.Demo\Neat.Demo.csproj", "{AC2E2082-2713-4ED1-B37A-50AD7EC8632C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neat.DemoSnake", "Neat.DemoSnake\Neat.DemoSnake.csproj", "{82E4F7ED-9026-4248-9D37-A290561A99FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{AC2E2082-2713-4ED1-B37A-50AD7EC8632C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC2E2082-2713-4ED1-B37A-50AD7EC8632C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC2E2082-2713-4ED1-B37A-50AD7EC8632C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82E4F7ED-9026-4248-9D37-A290561A99FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82E4F7ED-9026-4248-9D37-A290561A99FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82E4F7ED-9026-4248-9D37-A290561A99FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82E4F7ED-9026-4248-9D37-A290561A99FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -385,7 +385,7 @@ namespace Neat.EA
         /// </summary>
         public EvolutionaryAlogorithm(int inputs, int outputs)
         {
-            this._inputs = inputs;
+            this._inputs = inputs + 1;
             this._outputs = outputs;
             this._random = new Random();
         }
@@ -403,10 +403,9 @@ namespace Neat.EA
 
             while (true)
             {
+                this._pool.GetCurrentGenome().Network = new Network(this, this._pool.GetCurrentGenome());
 
-                Network network = new Network(this, this._pool.GetCurrentGenome());
-
-                double fitness = this._evaluateNetwork(network);
+                double fitness = this._evaluateNetwork(this._pool.GetCurrentGenome().Network);
 
                 this._pool.GetCurrentGenome().Fitness = fitness;
 

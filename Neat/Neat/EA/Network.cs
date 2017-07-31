@@ -67,13 +67,14 @@ namespace Neat.EA
         /// <returns></returns>
         public double[] Run(double[] input)
         {
-            if (input.GetLength(0) != this._ea.Inputs)
+            if (input.GetLength(0) != this._ea.Inputs - 1)
                 throw new ArgumentException("The number of inputs must match the number of neurons in the input layer");
             
             double[] output = new double[this._ea.Outputs];
 
             for (int i = 0; i < input.GetLength(0); i++)
                 this._neurons[i].Value = input[i];
+            this._neurons[this._ea.Inputs - 1].Value = 1;
 
             foreach (Neuron neuron in this._neurons)
             {
