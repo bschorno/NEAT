@@ -130,7 +130,7 @@ namespace Neat.DemoSnake
                     }));
                 
             
-                Thread.Sleep(100);
+                Thread.Sleep(1);
             }
 
             this._fitness += this._score * 1000;

@@ -323,8 +323,8 @@ namespace Neat.EA
             global.Sort(delegate (Genome g1, Genome g2)
             {
                 if (g1.Fitness == g2.Fitness) return 0;
-                else if (g1.Fitness < g2.Fitness) return 1;
-                else if (g1.Fitness > g2.Fitness) return -1;
+                else if (g1.Fitness > g2.Fitness) return 1;
+                else if (g1.Fitness < g2.Fitness) return -1;
                 else return 0;
             });
 
