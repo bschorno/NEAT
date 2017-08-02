@@ -40,7 +40,7 @@
                 <Label FontSize="9" x:Name="_lblGenome"/>
             </StackPanel>
         </StackPanel>
-        <Canvas x:Name="_cnvNetwork" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Background="#FFFFEBDE">
+        <Canvas x:Name="_cnvNetwork" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Background="#FF9374FF">
             
         </Canvas>
     </Grid>

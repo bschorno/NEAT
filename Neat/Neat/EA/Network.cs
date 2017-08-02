@@ -7,6 +7,7 @@ namespace Neat.EA
     {
         private EvolutionaryAlogorithm _ea;
         private Neuron[] _neurons;
+        private Genome _genome;
 
         /// <summary>
         /// Neurons
@@ -24,12 +25,24 @@ namespace Neat.EA
         }
 
         /// <summary>
+        /// Genome of this network
+        /// </summary>
+        public Genome Genome
+        {
+            get
+            {
+                return this._genome;
+            }
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ea"></param>
         public Network(EvolutionaryAlogorithm ea, Genome genome)
         {
             this._ea = ea;
+            this._genome = genome;
 
             this._neurons = new Neuron[this._ea.MaxNodes + this._ea.Outputs];
 

@@ -313,12 +313,23 @@ namespace Neat.EA
         /// </summary>
         private void BiasMutate()
         {
-            int neuron = this.RandomNeuron(false);
+            int var1 = this.RandomNeuron(false);
+            int var2 = this.RandomNeuron(true);
+
+            if (var1 < this._ea.Inputs && var2 < this._ea.Inputs)
+                return;
+
+            if (var2 < this._ea.Inputs)
+            {
+                int tmp = var1;
+                var1 = var2;
+                var2 = tmp;
+            }
 
             Gene var3 = new Gene(this._ea)
             {
                 Into = this._ea.Inputs - 1,
-                Out = neuron
+                Out = var2
             };
 
             if (this._genes.Contains(var3))

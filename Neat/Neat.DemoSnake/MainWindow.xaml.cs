@@ -59,6 +59,8 @@ namespace Neat.DemoSnake
         {
             this._fitness = 0;
 
+            long ticks = 0;
+
             this.StartRun();
 
             while (!this._gameOver)
@@ -123,6 +125,9 @@ namespace Neat.DemoSnake
 
                 this._fitness += 1;
 
+                if (++ticks / 100 > this._score)
+                    this.GameOver();
+
                 if (!this._gameOver)
                     Dispatcher.Invoke((Action)(() =>
                     {
@@ -130,7 +135,7 @@ namespace Neat.DemoSnake
                     }));
                 
             
-                Thread.Sleep(1);
+                Thread.Sleep(10);
             }
 
             this._fitness += this._score * 1000;
@@ -148,6 +153,9 @@ namespace Neat.DemoSnake
 
             this._random = new Random(1997);
             this.PlaceFood();
+
+            this._direction = Direction.Down;
+            this._lastDirection = Direction.Down;
 
             Dispatcher.Invoke((Action)(() =>
             {
@@ -257,10 +265,13 @@ namespace Neat.DemoSnake
             this._cnvNetwork.Children.Clear();
 
             Network network = this._ea.Pool.GetCurrentGenome().Network;
+
             if (network == null)
                 return;
 
-            List<GuiNeuron> neuron = new List<GuiNeuron>();
+            //List<GuiNeuron> neuron = new List<GuiNeuron>();
+            GuiNeuron[] neuron = new GuiNeuron[network.Neurons.GetLength(0)];
+            GuiGene[] gene = new GuiGene[network.Genome.Genes.Count];
 
             int j = 0;
             for (int x = 0; x < 5; x++)
@@ -268,31 +279,71 @@ namespace Neat.DemoSnake
                 {
                     if (x == 2 && y == 2)
                         continue;
-                    neuron.Add(new GuiNeuron(x, y, network.Neurons[j++].Value));
+                    neuron[j] = new GuiNeuron(x, y, network.Neurons[j++].Value);
                 }
-            neuron.Add(new GuiNeuron(4, 6, network.Neurons[j++].Value));
+            neuron[j] = new GuiNeuron(4, 6, network.Neurons[j++].Value);
 
-            for (int i = 0; i < neuron.Count; i++)
+            for (int i = j; i < this._ea.MaxNodes; i++)
             {
-                if (neuron[i].Value == 0)
+                if (network.Neurons[j] != null)
+                    neuron[j] = new GuiNeuron(10 + (j / 8), (j % 8), network.Neurons[j++].Value);
+                else
+                    j++;
+            }
+
+            for (int i = 0; i < this._ea.Outputs; i++)
+            {
+                neuron[j] = new GuiNeuron(40, i, network.Neurons[j++].Value);
+            }
+
+            
+            for (int i = 0; i < gene.GetLength(0); i++)
+            {
+                Gene g = network.Genome.Genes[i];
+                if (g.Enable)
+                    gene[i] = new GuiGene(neuron[g.Out].X, neuron[g.Out].Y, neuron[g.Into].X, neuron[g.Into].Y, g.Weight);
+            }
+
+            for (int i = 0; i < neuron.GetLength(0); i++)
+            {
+                if (neuron[i] == null)
                     continue;
+                //if (neuron[i].Value == 0)
+                //    continue;
                 Rectangle n = new Rectangle();
                 n.Stroke = new SolidColorBrush(Colors.Black);
-                n.Fill = new SolidColorBrush(neuron[i].Value > 0 ? Colors.White : Colors.Black);
-                n.Width = 8;
-                n.Height = 8;
-                Canvas.SetLeft(n, (neuron[i].X + 1) * 8);
-                Canvas.SetTop(n, (neuron[i].Y + 1) * 8);
+                if (neuron[i].Value != 0)
+                    n.Fill = new SolidColorBrush(neuron[i].Value > 0 ? Colors.White : Colors.Black);
+                n.Width = 12;
+                n.Height = 12;
+                Canvas.SetLeft(n, neuron[i].X * 12);
+                Canvas.SetTop(n, neuron[i].Y * 12);
                 this._cnvNetwork.Children.Add(n);
+            }
+
+            for (int i = 0; i < gene.GetLength(0); i++)
+            {
+                if (gene[i] == null)
+                    continue;
+                if (gene[i].Weight == 0)
+                    continue;
+                Line g = new Line();
+                g.X1 = gene[i].X1 * 12 + 4;
+                g.Y1 = gene[i].Y1 * 12 + 4;
+                g.X2 = gene[i].X2 * 12 + 4;
+                g.Y2 = gene[i].Y2 * 12 + 4;
+                g.Stroke = new SolidColorBrush(gene[i].Weight > 0 ? Colors.Green : Colors.Red);
+                g.StrokeThickness = 1;
+                this._cnvNetwork.Children.Add(g);
             }
 
             Rectangle s = new Rectangle();
             s.Stroke = new SolidColorBrush(Colors.Black);
             s.Fill = new SolidColorBrush(Colors.Red);
-            s.Width = 8;
-            s.Height = 8;
-            Canvas.SetLeft(s, 3 * 8);
-            Canvas.SetTop(s, 3 * 8);
+            s.Width = 12;
+            s.Height = 12;
+            Canvas.SetLeft(s, 2 * 12);
+            Canvas.SetTop(s, 2 * 12);
             this._cnvNetwork.Children.Add(s);
         }
 
@@ -308,7 +359,7 @@ namespace Neat.DemoSnake
         }
     }
 
-    internal struct GuiNeuron
+    internal class GuiNeuron
     {
         public int X;
         public int Y;
@@ -322,16 +373,20 @@ namespace Neat.DemoSnake
         }
     }
 
-    internal struct GuiGene
+    internal class GuiGene
     {
-        public int X;
-        public int Y;
+        public int X1;
+        public int Y1;
+        public int X2;
+        public int Y2;
         public double Weight;
 
-        public GuiGene(int x, int y, double weight)
+        public GuiGene(int x1, int y1, int x2, int y2, double weight)
         {
-            X = x;
-            Y = y;
+            X1 = x1;
+            Y1 = y1;
+            X2 = x2;
+            Y2 = y2;
             Weight = weight;
         }
     }
