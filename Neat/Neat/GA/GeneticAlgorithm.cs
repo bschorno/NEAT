@@ -20,6 +20,9 @@ namespace Neat.GA
         private double _totalFitness;
         private bool _elitism;
         private GAFunction _fitnessFunction;
+        private int _currentGeneration;
+        private int _currentPopulation;
+        private double _maxFitness;
 
         /// <summary>
         /// Population size
@@ -127,6 +130,39 @@ namespace Neat.GA
         }
 
         /// <summary>
+        /// Current generation
+        /// </summary>
+        public int CurrentGeneration
+        {
+            get
+            {
+                return this._currentGeneration;
+            }
+        }
+
+        /// <summary>
+        /// Current population
+        /// </summary>
+        public int CurrentPopulation
+        {
+            get
+            {
+                return this._currentPopulation;
+            }
+        }
+
+        /// <summary>
+        /// Max fitness
+        /// </summary>
+        public double MaxFitness
+        {
+            get
+            {
+                return this._maxFitness;
+            }
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public GeneticAlgorithm()
@@ -174,14 +210,20 @@ namespace Neat.GA
                 throw new IndexOutOfRangeException("Genome size not set");
 
             this._fitnessTable = new List<double>();
-            this._thisGeneration = new List<Genome>(this._generationSize);
-            this._nextGeneration = new List<Genome>(this._generationSize);
+            this._maxFitness = 0;
+            this._currentGeneration = 0;
+
+            //this._thisGeneration = new List<Genome>(this._generationSize);
+            //this._nextGeneration = new List<Genome>(this._generationSize);
+            this._thisGeneration = new List<Genome>(this._populationSize);
+            this._nextGeneration = new List<Genome>(this._populationSize);
 
             this.CreateGenomes();
             this.RankPopulation();
 
             for (int i = 0; i < this._generationSize; i++)
             {
+                this._currentGeneration++;
                 this.CreateNextGeneration();
                 double fitness = this.RankPopulation();
 
@@ -200,30 +242,40 @@ namespace Neat.GA
         /// <returns></returns>
         private int RouletteSelection()
         {
-            double randomFitness = this._random.NextDouble() * this._totalFitness;
-            int idx = -1;
-            int mid;
-            int first = 0;
-            int last = this._populationSize - 1;
-            mid = (last - first) / 2;
+            double randomFitness = this._random.Next(0, (int)this._totalFitness);
+            double runFitness = 0;
 
-            // Binary Searchs
-            while (idx == -1 && first <= last)
+            for (int i = 0; i < this._fitnessTable.Count; i++)
             {
-                if (randomFitness < this._fitnessTable[mid])
-                {
-                    last = mid;
-                }
-                else if (randomFitness > this._fitnessTable[mid])
-                {
-                    first = mid;
-                }
-                mid = (first + last) / 2;
-
-                if ((last - first) == 1)
-                    idx = last;
+                runFitness += this._fitnessTable[i];
+                if (runFitness > randomFitness)
+                    return i;
             }
-            return idx;
+            return 0;
+            //double randomFitness = this._random.NextDouble() * this._totalFitness;
+            //int idx = -1;
+            //int mid;
+            //int first = 0;
+            //int last = this._populationSize - 1;
+            //mid = (last - first) / 2;
+
+            //// Binary Searchs
+            //while (idx == -1 && first <= last)
+            //{
+            //    if (randomFitness < this._fitnessTable[mid])
+            //    {
+            //        last = mid;
+            //    }
+            //    else if (randomFitness > this._fitnessTable[mid])
+            //    {
+            //        first = mid;
+            //    }
+            //    mid = (first + last) / 2;
+
+            //    if ((last - first) == 1)
+            //        idx = last;
+            //}
+            //return idx;
         }
 
         /// <summary>
@@ -232,10 +284,16 @@ namespace Neat.GA
 		private double RankPopulation()
         {
             this._totalFitness = 0d;
+            this._currentPopulation = 0;
             foreach (Genome g in this._thisGeneration)
             {
                 g.Fitness = this._fitnessFunction(g.Genes);
                 this._totalFitness += g.Fitness;
+                
+                if (g.Fitness > this._maxFitness)
+                    this._maxFitness = g.Fitness;
+
+                this._currentPopulation++;
             }
             this._thisGeneration.Sort(delegate (Genome x, Genome y)
             {

@@ -165,7 +165,14 @@ namespace Neat.GA
             for (int pos = 0; pos < this._length; pos++)
             {
                 if (random.NextDouble() < this._mutationRate)
-                    this._genes[pos] = (this._genes[pos] + (random.NextDouble() + random.Next(-20, 20))) / 2.0;
+                {
+                    this._genes[pos] += (random.Next(0, 3) - 1) / 5;
+                    if (this._genes[pos] > 1)
+                        this._genes[pos] = 1;
+                    if (this._genes[pos] < -1)
+                        this._genes[pos] = -1;
+                }
+                    //this._genes[pos] = (this._genes[pos] + (random.NextDouble() + random.Next(-20, 20))) / 2.0;
             }
         }
 

@@ -45,6 +45,7 @@ namespace Neat.DemoSnake
 
             this._ea = new EvolutionaryAlogorithm(24, 2);
             this._ea.EvaluateNetwork = this.EvaluateNetwork;
+            this._ea.PopulationSize = 500;
             this._eaThread = new Thread(this._ea.Run);
             this._eaThread.SetApartmentState(ApartmentState.STA);
             this._eaThread.Start();
@@ -151,7 +152,7 @@ namespace Neat.DemoSnake
             this._snake.Clear();
             this._snake.Add(new Point((int)(this._width / 2), (int)(this._height / 2)));
 
-            this._random = new Random(1997);
+            this._random = new Random();
             this.PlaceFood();
 
             this._direction = Direction.Down;
@@ -328,10 +329,10 @@ namespace Neat.DemoSnake
                 if (gene[i].Weight == 0)
                     continue;
                 Line g = new Line();
-                g.X1 = gene[i].X1 * 12 + 4;
-                g.Y1 = gene[i].Y1 * 12 + 4;
-                g.X2 = gene[i].X2 * 12 + 4;
-                g.Y2 = gene[i].Y2 * 12 + 4;
+                g.X1 = gene[i].X1 * 12 + 6;
+                g.Y1 = gene[i].Y1 * 12 + 6;
+                g.X2 = gene[i].X2 * 12 + 6;
+                g.Y2 = gene[i].Y2 * 12 + 6;
                 g.Stroke = new SolidColorBrush(gene[i].Weight > 0 ? Colors.Green : Colors.Red);
                 g.StrokeThickness = 1;
                 this._cnvNetwork.Children.Add(g);
